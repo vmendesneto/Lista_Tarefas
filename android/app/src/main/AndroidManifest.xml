@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lista_tarefas">
+    package="com.vmendesneto.lista_tarefas">
    <application
         android:label="Lista de Tarefas"
         android:icon="@mipmap/ic_launcher">

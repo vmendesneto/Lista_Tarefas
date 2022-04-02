@@ -1,4 +1,4 @@
-package com.lista_tarefas
+package com.vmendesneto.lista_tarefas
 
 import io.flutter.embedding.android.FlutterActivity
 
