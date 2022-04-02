@@ -7,6 +7,11 @@ import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(MaterialApp(
+    theme: ThemeData(
+        primaryColor: Colors.blueAccent[700],
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style:
+                TextButton.styleFrom(backgroundColor: Colors.blueAccent[700]))),
     debugShowCheckedModeBanner: false,
     home: Home(),
   ));
@@ -24,7 +29,6 @@ class _HomeState extends State<Home> {
   Map<String, dynamic> _lastRemoved;
   int _lastRemovedPos;
 
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +40,7 @@ class _HomeState extends State<Home> {
   }
 
   void _addToDo() {
-    if(_toDoControler.text.isNotEmpty) {
+    if (_toDoControler.text.isNotEmpty) {
       setState(() {
         Map<String, dynamic> newToDo = Map();
         newToDo["title"] = _toDoControler.text;
@@ -70,7 +74,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Lista de Tarefas"),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blueAccent[700],
         centerTitle: true,
       ),
       body: Column(
@@ -81,6 +85,7 @@ class _HomeState extends State<Home> {
               children: [
                 Expanded(
                     child: TextFormField(
+                      autofocus: true,
                         validator: (value) {
                           if (value.isEmpty || value == "") {
                             return "Insira Tarefa";
@@ -91,12 +96,10 @@ class _HomeState extends State<Home> {
                         decoration: InputDecoration(
                             labelText: ("Nova tarefa"),
                             labelStyle: TextStyle(
-                              color: Colors.blueAccent,
+                              color: Colors.blueAccent[700],
                             )))),
-                RaisedButton(
-                  color: Colors.blueAccent,
+                ElevatedButton(
                   child: Text("ADD"),
-                  textColor: Colors.white,
                   onPressed: _addToDo,
                 ),
               ],
@@ -131,11 +134,18 @@ class _HomeState extends State<Home> {
       ),
       direction: DismissDirection.startToEnd,
       child: CheckboxListTile(
-        title: Text(_toDoList[index]["title"]),
+        subtitle: Text(
+          "Arraste para excluir",
+          style: TextStyle(fontSize: 12),
+        ),
+        title: Text(
+          _toDoList[index]["title"],
+          style: TextStyle(fontSize: 20),
+        ),
         value: _toDoList[index]["ok"],
         secondary: CircleAvatar(
           child: Icon(
-            _toDoList[index]["ok"] ? Icons.check : Icons.error,
+            _toDoList[index]["ok"] ? Icons.check : Icons.pending_actions,
           ),
         ),
         onChanged: (c) {
@@ -165,8 +175,8 @@ class _HomeState extends State<Home> {
                 }),
             duration: Duration(seconds: 3),
           );
-          Scaffold.of(context).removeCurrentSnackBar();
-          Scaffold.of(context).showSnackBar(sanke);
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(sanke);
         });
       },
     );
