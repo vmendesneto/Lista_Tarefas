@@ -1,4 +1,7 @@
 
+import 'dart:io' show Platform;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lista_tarefas_vitor/providers/providers.dart';
@@ -30,14 +33,21 @@ class MyApp extends ConsumerWidget {
     themesNotifier.setTheme(themes[prefs!.getInt("theme") ?? 1]);
 
 
-
-    return MaterialApp(
+    return Platform.isAndroid == true ? MaterialApp(
       theme: themesNotifier.getTheme(),
       title: 'Lista de Tarefas',
       debugShowCheckedModeBanner: false,
       routes: {
         '/home': (context) => HomePage(),
       },
+      home: HomePage(),
+    ) :  CupertinoApp(
+        theme: themesNotifier.getTheme(),
+    title: 'Lista de Tarefas',
+    debugShowCheckedModeBanner: false,
+    routes: {
+    '/home': (context) => HomePage(),
+    },
       home: HomePage(),
     );
   }
