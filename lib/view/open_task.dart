@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lista_tarefas_vitor/controller/initial_controller.dart';
 import 'package:lista_tarefas_vitor/providers/providers.dart';
 import 'package:lista_tarefas_vitor/widgets/dialog_theme.dart';
+import 'package:share/share.dart';
+
 
 class OpenTask extends ConsumerStatefulWidget {
   const OpenTask({Key? key}) : super(key: key);
@@ -14,11 +16,12 @@ class OpenTask extends ConsumerStatefulWidget {
 }
 
 class OpenTaskState extends ConsumerState<OpenTask> {
-  var inicio = new initial();
+  final inicio = new initial();
   final _toDoControler = TextEditingController();
 
   late Map<String, dynamic> _lastRemoved;
   late int _lastRemovedPos;
+
 
   @override
   void initState() {
@@ -50,7 +53,8 @@ class OpenTaskState extends ConsumerState<OpenTask> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(themeProvider);
-
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text("Lista de Tarefas"),
@@ -63,22 +67,22 @@ class OpenTaskState extends ConsumerState<OpenTask> {
               enabled: true,
               onSelected: (value) {
                 setState(() {
-                 // value == 1
-                      //?
+                  //value == 1
+                  //   ?
                   Navigator.of(context)
-                          .push(showThemeChangerDialog(context));
-                      //: showConfDelete(context,state);
+                         .push(showThemeChangerDialog(context));
+
                 });
               },
               itemBuilder: (context) => [
                     PopupMenuItem(
-                      child: Text(
-                        "Trocar Tema",
+                      child:  Text(
+                        "Trocar o Tema",
                         style: TextStyle(color: state.cardColor),
                       ),
                       value: 1,
                     ),
-                    /*PopupMenuItem(
+                   /* PopupMenuItem(
                       child: Text("Apagar Todas as Tarefas",
                           style: TextStyle(color: state.cardColor)),
                       value: 2,
@@ -89,19 +93,19 @@ class OpenTaskState extends ConsumerState<OpenTask> {
       body: Center(
           child: Column(
         children: [
-          SizedBox(height: 2.0),
+          SizedBox(height: _height * 0.0016,),
           Container(
             padding: EdgeInsets.all(4.0),
             child: Row(
               children: [
                 Expanded(
                     child: Container(
-                        height: 50,
+                        height: _height * 0.06,
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueAccent)),
                         child: TextField(
                             style:
-                                TextStyle(color: state.cardColor, fontSize: 45, decoration: TextDecoration.none),
+                                TextStyle(color: state.cardColor, fontSize: _height * 0.054, decoration: TextDecoration.none),
                             autofocus: false,
                             controller: _toDoControler,
                             decoration: InputDecoration(
@@ -113,15 +117,18 @@ class OpenTaskState extends ConsumerState<OpenTask> {
                                 hintText: ("Nova tarefa"),
                                 hintStyle: TextStyle(
                                     color: Colors.blueAccent,
-                                    fontSize: 20))))),
+                                    fontSize: _height * 0.024))))),
                 SizedBox(
-                  width: 5,
+                  width: _width * 0.0125,
                 ),
                 SizedBox(
-                    height: 50,
+                    height: _height * 0.06,
                     child: ElevatedButton(
                       child: Text("ADD"),
-                      onPressed: addToDo,
+                      onPressed:(){
+                        addToDo();
+                        _refresh();
+                      } ,
                     )),
               ],
             ),
@@ -139,6 +146,8 @@ class OpenTaskState extends ConsumerState<OpenTask> {
 
   Widget buildItem(context, index) {
     final state = ref.watch(themeProvider);
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.height;
 
     return Dismissible(
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
@@ -168,12 +177,12 @@ class OpenTaskState extends ConsumerState<OpenTask> {
                         subtitle: Text(
                           "Arraste para direita para excluir  -->",
                           style:
-                              TextStyle(fontSize: 12, color: state.cardColor),
+                              TextStyle(fontSize: _height * 0.0164, color: state.cardColor),
                         ),
                         title: Text(
                           inicio.lista[index]["title"],
                           style:
-                              TextStyle(fontSize: 20, color: state.cardColor),
+                              TextStyle(fontSize: _height * 0.03, color: state.cardColor),
                         ),
                         value: inicio.lista[index]["ok"],
                         secondary: CircleAvatar(
@@ -200,6 +209,7 @@ class OpenTaskState extends ConsumerState<OpenTask> {
           inicio.lista.removeAt(index);
           inicio.savedata();
 
+
           final sanke = SnackBar(
             content: Text("Tarefa ${_lastRemoved["title"]} foi removida"),
             action: SnackBarAction(
@@ -217,6 +227,24 @@ class OpenTaskState extends ConsumerState<OpenTask> {
         });
       },
     );
+
+  }
+
+
+  Future<Null> _refresh() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    setState(() {
+      inicio.lista.sort((a, b) {
+        if (a["ok"] && !b["ok"])
+          return 1;
+        else if (!a["ok"] && b["ok"])
+          return -1;
+        else
+          return 0;
+      });
+      inicio.savedata();
+    });
+    return null;
   }
 
   /*showConfDelete(BuildContext context, state) {

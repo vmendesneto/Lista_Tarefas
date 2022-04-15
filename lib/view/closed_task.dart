@@ -53,7 +53,7 @@ class ClosedTaskState extends ConsumerState<ClosedTask> {
               itemBuilder: (context) => [
                     PopupMenuItem(
                       child: Text(
-                        "Trocar Tema",
+                        "Trocar o Tema",
                         style: TextStyle(color: state.cardColor),
                       ),
                       value: 1,
@@ -165,5 +165,20 @@ class ClosedTaskState extends ConsumerState<ClosedTask> {
         });
       },
     );
+  }
+  Future<Null> _refresh() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    setState(() {
+      inicio.lista.sort((a, b) {
+        if (a["ok"] && !b["ok"])
+          return 1;
+        else if (!a["ok"] && b["ok"])
+          return -1;
+        else
+          return 0;
+      });
+      inicio.savedata();
+    });
+    return null;
   }
 }

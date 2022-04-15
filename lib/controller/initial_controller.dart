@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 
 class initial{
   List lista = [];
-
+  List titulo = [];
 
   Future<File> getFile() async {
     final directory = await getApplicationDocumentsDirectory();
