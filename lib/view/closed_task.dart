@@ -6,19 +6,17 @@ import 'package:lista_tarefas_vitor/controller/initial_controller.dart';
 import 'package:lista_tarefas_vitor/providers/providers.dart';
 import 'package:lista_tarefas_vitor/widgets/dialog_theme.dart';
 
-class OpenTask extends ConsumerStatefulWidget {
-  const OpenTask({Key? key}) : super(key: key);
+class ClosedTask extends ConsumerStatefulWidget {
+  const ClosedTask({Key? key}) : super(key: key);
 
   @override
-  OpenTaskState createState() => OpenTaskState();
+  ClosedTaskState createState() => ClosedTaskState();
 }
 
-class OpenTaskState extends ConsumerState<OpenTask> {
-  var inicio = new initial();
-  final _toDoControler = TextEditingController();
-
+class ClosedTaskState extends ConsumerState<ClosedTask> {
   late Map<String, dynamic> _lastRemoved;
   late int _lastRemovedPos;
+  var inicio = new initial();
 
   @override
   void initState() {
@@ -30,23 +28,6 @@ class OpenTaskState extends ConsumerState<OpenTask> {
     });
   }
 
-  void addToDo() {
-    if (_toDoControler.text.isNotEmpty) {
-      Map<String, dynamic> newToDo = Map();
-      newToDo["title"] = _toDoControler.text;
-      newToDo["ok"] = false;
-      inicio.lista.add(newToDo);
-      inicio.savedata();
-      setState(() {
-        inicio.lista = inicio.lista;
-        _toDoControler.text = "";
-        FocusScope.of(context).requestFocus(new FocusNode());
-      });
-
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(themeProvider);
@@ -54,7 +35,7 @@ class OpenTaskState extends ConsumerState<OpenTask> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Lista de Tarefas"),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blueAccent[700],
         centerTitle: true,
         actions: [
           PopupMenuButton(
@@ -63,11 +44,10 @@ class OpenTaskState extends ConsumerState<OpenTask> {
               enabled: true,
               onSelected: (value) {
                 setState(() {
-                 // value == 1
-                      //?
-                  Navigator.of(context)
-                          .push(showThemeChangerDialog(context));
-                      //: showConfDelete(context,state);
+                  //value == 1
+                  //     ?
+                  Navigator.of(context).push(showThemeChangerDialog(context));
+                  //    : inicio.deleteData;
                 });
               },
               itemBuilder: (context) => [
@@ -78,54 +58,17 @@ class OpenTaskState extends ConsumerState<OpenTask> {
                       ),
                       value: 1,
                     ),
-                    /*PopupMenuItem(
-                      child: Text("Apagar Todas as Tarefas",
-                          style: TextStyle(color: state.cardColor)),
-                      value: 2,
-                    ),*/
+                    // PopupMenuItem(
+                    //   child: Text("Apagar Todas as Tarefas",
+                    //       style: TextStyle(color: state.cardColor)),
+                    //   value: 2,
+                    // ),
                   ])
         ],
       ),
       body: Center(
           child: Column(
         children: [
-          SizedBox(height: 2.0),
-          Container(
-            padding: EdgeInsets.all(4.0),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)),
-                        child: TextField(
-                            style:
-                                TextStyle(color: state.cardColor, fontSize: 45, decoration: TextDecoration.none),
-                            autofocus: false,
-                            controller: _toDoControler,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: ("Nova tarefa"),
-                                hintStyle: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 20))))),
-                SizedBox(
-                  width: 5,
-                ),
-                SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      child: Text("ADD"),
-                      onPressed: addToDo,
-                    )),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
@@ -153,7 +96,7 @@ class OpenTaskState extends ConsumerState<OpenTask> {
         ),
       ),
       direction: DismissDirection.startToEnd,
-      child: inicio.lista[index]["ok"] == false
+      child: inicio.lista[index]["ok"] == true
           ? Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
@@ -164,9 +107,10 @@ class OpenTaskState extends ConsumerState<OpenTask> {
 
                     child: CheckboxListTile(
                         tileColor: state.primaryColorDark,
-                        selectedTileColor: state.cardColor,
+                        checkColor: state.primaryColor,
+                        activeColor: state.cardColor,
                         subtitle: Text(
-                          "Arraste para direita para excluir  -->",
+                          "Arraste para excluir",
                           style:
                               TextStyle(fontSize: 12, color: state.cardColor),
                         ),
@@ -185,10 +129,13 @@ class OpenTaskState extends ConsumerState<OpenTask> {
                             color: state.cardColor,
                           ),
                         ),
-                        onChanged: (c) {
+                        onChanged: (c) async {
                           setState(() {
                             inicio.lista[index]["ok"] = c;
                             inicio.savedata();
+                          });
+                          await inicio.readData().then((data) {
+                            inicio.lista = json.decode(data!);
                           });
                         }))
               ]))
@@ -198,6 +145,7 @@ class OpenTaskState extends ConsumerState<OpenTask> {
           _lastRemoved = Map.from(inicio.lista[index]);
           _lastRemovedPos = index;
           inicio.lista.removeAt(index);
+
           inicio.savedata();
 
           final sanke = SnackBar(
@@ -218,43 +166,4 @@ class OpenTaskState extends ConsumerState<OpenTask> {
       },
     );
   }
-
-  /*showConfDelete(BuildContext context, state) {
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: state.primaryColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          title:
-              Text("Excluir Tarefas", style: TextStyle(color: state.cardColor)),
-          content: Text("Confirma a exclusão das tarefas pendentes",
-              style: TextStyle(color: state.cardColor)),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Yes', style: TextStyle(color: state.hoverColor)),
-              onPressed: () {
-                setState(() {
-                  inicio.deleteData();
-                  inicio.lista = inicio.lista;
-                  Navigator.pop(context);
-                });
-
-              },
-            ),
-            TextButton(
-              child: Text('No', style: TextStyle(color: state.hoverColor)),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-
-  }*/
 }

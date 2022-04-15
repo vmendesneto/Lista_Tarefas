@@ -42,6 +42,7 @@ final darkTheme = ThemeData(
   accentColor: darkThemeAccentColor,
   hoverColor: darkThemeAccentColor,
   cardColor: darkThemeCardColor,
+  unselectedWidgetColor: darkThemeCardColor,
   canvasColor: Colors.transparent,
   primaryIconTheme: IconThemeData(color: Colors.white),
   textTheme: TextTheme(
@@ -84,6 +85,7 @@ final darkTheme = ThemeData(
 );
 
 final lightTheme = ThemeData(
+  unselectedWidgetColor: lightThemeCardColor,
   primaryColorDark: lightThemePrimaryColorDark,
   primaryColor: lightThemePrimaryColor,
   buttonColor: lightThemeButtonColor,

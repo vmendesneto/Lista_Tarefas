@@ -6,6 +6,8 @@ import 'package:lista_tarefas_vitor/utils/theme_colors.dart';
 import 'package:lista_tarefas_vitor/view/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'controller/initial_controller.dart';
+
 
 late SharedPreferences? prefs;
 
@@ -26,6 +28,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themesNotifier = ref.read(themeProvider.notifier);
     themesNotifier.setTheme(themes[prefs!.getInt("theme") ?? 1]);
+
+
 
     return MaterialApp(
       theme: themesNotifier.getTheme(),
