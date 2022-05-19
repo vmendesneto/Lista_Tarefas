@@ -4,7 +4,7 @@ Termos De Uso e Política de privacidade
 
 VISÃO GERAL
 
-Esse aplicativo é operado pelo RonnyyApp Em todo o aplicativo, os termos “nós”, “nos” e “nosso” se referem ao RonnyyApp. O ronnyyapp.net proporciona esse , incluindo todas as informações, ferramentas e serviços disponíveis deste aplicativo para você, o usuário, com a condição da sua aceitação de todos os termos, condições, políticas e avisos declarados aqui.
+Esse aplicativo é operado pelo V.Mendes Em todo o aplicativo, os termos “nós”, “nos” e “nosso” se referem ao RonnyyApp. O vmendes.net proporciona esse , incluindo todas as informações, ferramentas e serviços disponíveis deste aplicativo para você, o usuário, com a condição da sua aceitação de todos os termos, condições, políticas e avisos declarados aqui.
 
 Ao visitar nosso aplicativo e/ou comprar alguma coisa no nosso aplicativo, você está utilizando nossos “Serviços”. Consequentemente, você concorda com os seguintes Termos de Uso e Política de privacidade (“Termos de Uso”, “Política de privacidade”), incluindo os termos e políticas adicionais mencionados neste documento e/ou disponíveis por hyperlink. Essa Política de privacidade se aplicam a todos os usuários do aplicativo, incluindo, sem limitação, os usuários que são navegadores, fornecedores, clientes, lojistas e/ou contribuidores de conteúdo.
 
