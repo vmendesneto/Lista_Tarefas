@@ -33,8 +33,9 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
+    namespace "com.vmendesneto.lista_tarefas"
     ndkVersion '21.1.6528147'
-    compileSdkVersion 30
+    compileSdkVersion 36
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -52,9 +53,9 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.vmendesneto.lista_tarefas"
         minSdkVersion 16
-        targetSdkVersion 30
-        versionCode 3
-        versionName 'Version 3.0.0'
+        targetSdkVersion 36
+        versionCode 4
+        versionName '3.1.0'
     }
 
     signingConfigs {
